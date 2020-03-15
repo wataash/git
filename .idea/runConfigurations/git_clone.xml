@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="git clone" type="CLionExternalRunConfiguration" factoryName="Application" PROGRAM_PARAMS="clone -vvvvv https://github.com/wataash/teshs.git" PASS_PARENT_ENVS_2="true" PROJECT_NAME="git" TARGET_NAME="cbt0" CONFIG_NAME="cbt0" RUN_PATH="$PROJECT_DIR$/git">
+    <envs>
+      <env name="GIT_TRACE2" value="1" />
+      <env name="GIT_TRACE2_PERF" value="0" />
+      <env name="GIT_TRACE2_EVENT" value="0" />
+      <env name="___" value="0" />
+      <env name="GIT_TRACE_PACKET" value="1" />
+    </envs>
+    <method v="2">
+      <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+    </method>
+  </configuration>
+</component>

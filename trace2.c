@@ -62,6 +62,12 @@ static int tr2_tgt_want_builtins(void)
 	int j;
 	int sum = 0;
 
+	(void)tr2_tgt_builtins;
+	// tgt_j:
+	(void)TR2_SYSENV_NORMAL; // env GIT_TRACE2=1 -> sum++
+	(void)TR2_SYSENV_PERF; // env GIT_TRACE2_PERF=1 -> sum++
+	(void)TR2_SYSENV_EVENT; // env GIT_TRACE2_EVENT=1 -> sum++
+	// (void)tr2_sysenv_settings;
 	for_each_builtin (j, tgt_j)
 		if (tgt_j->pfn_init())
 			sum++;

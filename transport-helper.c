@@ -140,6 +140,11 @@ static struct child_process *get_helper(struct transport *transport)
 
 	helper->trace2_child_class = helper->args.v[0]; /* "remote-<name>" */
 
+	if (strncmp(helper->args.argv[0], "git-remote-https", sizeof("git-remote-https")) == 0)
+		// helper->args.argv[0] = "/home/wsh/qc/git/git-remote-https";
+		asm("");
+	else
+		asm("");
 	code = start_command(helper);
 	if (code < 0 && errno == ENOENT)
 		die(_("unable to find remote helper for '%s'"), data->name);

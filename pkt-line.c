@@ -4,6 +4,7 @@
 
 char packet_buffer[LARGE_PACKET_MAX];
 static const char *packet_trace_prefix = "git";
+// GIT_TRACE_PACKET
 static struct trace_key trace_packet = TRACE_KEY_INIT(PACKET);
 static struct trace_key trace_pack = TRACE_KEY_INIT(PACKFILE);
 
@@ -33,6 +34,33 @@ static int packet_trace_pack(const char *buf, unsigned int len, int sideband)
 
 static void packet_trace(const char *buf, unsigned int len, int write)
 {
+	// env GIT_PACKET_TRACE=1 git clone ...
+	// 14:18:21.492045 pkt-line.c:107          packet:        clone< version 2
+	// (gdb) bt
+	// #0  packet_trace (buf=0x55555592fea0 <packet_buffer> "version 2", len=9, write=0) at pkt-line.c:43
+	// #1  0x0000555555730cff in packet_read_with_status (fd=5, src_buffer=0x7fffffffdd78, src_len=0x7fffffffdd80, buffer=0x55555592fea0 <packet_buffer> "version 2", size=65520, pktlen=0x7fffffffdd9c, options=7) at pkt-line.c:358
+	// #2  0x0000555555731229 in packet_reader_read (reader=0x7fffffffdd70) at pkt-line.c:499
+	// #3  0x0000555555731314 in packet_reader_peek (reader=0x7fffffffdd70) at pkt-line.c:531
+	// #4  0x0000555555694cee in discover_version (reader=0x7fffffffdd70) at connect.c:125
+	// #5  0x00005555557c9308 in handshake (transport=0x555555947370, for_push=0, ref_prefixes=0x7fffffffdee0, must_list_refs=1) at transport.c:294
+	// #6  0x00005555557c9461 in get_refs_via_connect (transport=0x555555947370, for_push=0, ref_prefixes=0x7fffffffdee0) at transport.c:324
+	// #7  0x00005555557cc30d in transport_get_remote_refs (transport=0x555555947370, ref_prefixes=0x7fffffffdee0) at transport.c:1287
+	// #8  0x00005555555967ef in cmd_clone (argc=1, argv=0x7fffffffe310, prefix=0x0) at builtin/clone.c:1216
+	// #9  0x0000555555570927 in run_builtin (p=0x5555558ea1e8 <commands+456>, argc=4, argv=0x7fffffffe310) at git.c:444
+	// #10 0x0000555555570c98 in handle_builtin (argc=4, argv=0x7fffffffe310) at git.c:674
+	// #11 0x0000555555570f5d in run_argv (argcp=0x7fffffffe1bc, argv=0x7fffffffe1b0) at git.c:741
+	// #12 0x0000555555571407 in cmd_main (argc=4, argv=0x7fffffffe310) at git.c:872
+	// #13 0x00005555556439d8 in main (argc=5, argv=0x7fffffffe308) at common-main.c:52
+	// #14 0x00007ffff7b88b6b in __libc_start_main (main=0x555555643962 <main>, argc=5, argv=0x7fffffffe308, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7fffffffe2f8) at ../csu/libc-start.c:308
+	// #15 0x000055555556edea in _start ()
+
+	(void)trace_packet; // TRACE_KEY_INIT(PACKET) GIT_TRACE_PACKET
+	(void)trace_pack; // TRACE_KEY_INIT(PACK) GIT_TRACE_PACK
+	// (void)get_trace_fd;
+	(void)trace_default_key; // TRACE_KEY_INIT(TRACE) GIT_TRACE
+	(void)trace_perf_key; // TRACE_KEY_INIT(PERF) GIT_TRACE_PERF
+	(void)trace_setup_key; // TRACE_KEY_INIT(SETUP) GIT_TRACE_SETUP
+
 	int i;
 	struct strbuf out;
 	static int in_pack, sideband;

@@ -23,8 +23,41 @@ static void restore_sigpipe_to_default(void)
 	signal(SIGPIPE, SIG_DFL);
 }
 
+int i;
+
+static void tes(void)
+{
+	if (i == 0)
+		asm("");
+	else
+		asm("");
+	if (i != 0)
+		asm("");
+	else
+		asm("");
+	return;
+}
+
+static void tes2(void)
+{
+	if (i == 0)
+		asm("nop");
+	else
+		asm("nop");
+	if (i != 0)
+		asm("nop");
+	else
+		asm("nop");
+	return;
+}
+
 int main(int argc, const char **argv)
 {
+	tes();
+	tes2();
+	setbuf(stdout, NULL);
+	setbuf(stderr, NULL);
+
 	int result;
 
 	trace2_initialize_clock();

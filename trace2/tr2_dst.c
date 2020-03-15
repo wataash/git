@@ -365,6 +365,8 @@ void tr2_dst_write_line(struct tr2_dst *dst, struct strbuf *buf_line)
 
 	strbuf_complete_line(buf_line); /* ensure final NL on buffer */
 
+	(void)write(fd, "\x1b[37m", sizeof("\x1b[37m") - 1);
+
 	/*
 	 * We do not use write_in_full() because we do not want
 	 * a short-write to try again.  We are using O_APPEND mode
@@ -381,7 +383,10 @@ void tr2_dst_write_line(struct tr2_dst *dst, struct strbuf *buf_line)
 	 * If we get an IO error, just close the trace dst.
 	 */
 	if (write(fd, buf_line->buf, buf_line->len) >= 0)
+	{
+		(void)write(fd, "\x1b[0m", sizeof("\x1b[0m") - 1);
 		return;
+	}
 
 	if (tr2_dst_want_warning())
 		warning("unable to write trace to '%s': %s",

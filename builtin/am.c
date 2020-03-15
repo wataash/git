@@ -676,6 +676,7 @@ static int split_mail_mbox(struct am_state *state, const char **paths,
 	strvec_push(&cp.args, "--");
 	strvec_pushv(&cp.args, paths);
 
+	// cp.args.argv: mailsplit -d4 -o.git/rebase-apply -b -- /home/wsh/patch
 	ret = capture_command(&cp, &last, 8);
 	if (ret)
 		goto exit;

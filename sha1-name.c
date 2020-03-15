@@ -1019,6 +1019,24 @@ static int peel_onion(struct repository *r, const char *name, int len,
 	unsigned int expected_type = 0;
 	struct object *o;
 
+	// $ git cat-file -t 123
+	// fatal: Not a valid object name 123
+	//
+	// (gdb) bt
+	// #0  peel_onion (r=0x55f78532f220 <the_repo>, name=0x7ffd16f8edf3 "789", len=3, oid=0x7ffd16f8dc80, lookup_flags=128) at sha1-name.c:1031
+	// #1  0x000055f7851a28d8 in get_oid_1 (r=0x55f78532f220 <the_repo>, name=0x7ffd16f8edf3 "789", len=3, oid=0x7ffd16f8dc80, lookup_flags=128) at sha1-name.c:1179
+	// #2  0x000055f7851a420c in get_oid_with_context_1 (repo=0x55f78532f220 <the_repo>, name=0x7ffd16f8edf3 "789", flags=128, prefix=0x0, oid=0x7ffd16f8dc80, oc=0x7ffd16f8dc00) at sha1-name.c:1797
+	// #3  0x000055f7851a48c0 in get_oid_with_context (repo=0x55f78532f220 <the_repo>, str=0x7ffd16f8edf3 "789", flags=128, oid=0x7ffd16f8dc80, oc=0x7ffd16f8dc00) at sha1-name.c:1940
+	// #4  0x000055f784f85b40 in cat_one_file (opt=116, exp_type=0x0, obj_name=0x7ffd16f8edf3 "789", unknown_type=0) at builtin/cat-file.c:78
+	// #5  0x000055f784f87949 in cmd_cat_file (argc=1, argv=0x7ffd16f8e5d0, prefix=0x0) at builtin/cat-file.c:717
+	// #6  0x000055f784f70937 in run_builtin (p=0x55f7852ea0f8 <commands+216>, argc=3, argv=0x7ffd16f8e5d0) at git.c:444
+	// #7  0x000055f784f70ca8 in handle_builtin (argc=3, argv=0x7ffd16f8e5d0) at git.c:674
+	// #8  0x000055f784f70f6d in run_argv (argcp=0x7ffd16f8e47c, argv=0x7ffd16f8e470) at git.c:741
+	// #9  0x000055f784f71417 in cmd_main (argc=3, argv=0x7ffd16f8e5d0) at git.c:872
+	// #10 0x000055f785043a5c in main (argc=4, argv=0x7ffd16f8e5c8) at common-main.c:85
+	// #11 0x00007f7dd11edb6b in __libc_start_main (main=0x55f7850439b4 <main>, argc=4, argv=0x7ffd16f8e5c8, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7ffd16f8e5b8) at ../csu/libc-start.c:308
+	// #12 0x000055f784f6edfa in _start ()
+
 	/*
 	 * "ref^{type}" dereferences ref repeatedly until you cannot
 	 * dereference anymore, or you get an object of given type,

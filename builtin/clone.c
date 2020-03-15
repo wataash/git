@@ -1164,6 +1164,11 @@ int cmd_clone(int argc, const char **argv, const char *prefix)
 	transport->family = family;
 
 	path = get_repo_path(remote->url[0], &is_bundle);
+	// git clone ~/.../
+	//                 option_local   is_local
+	// (default)                 -1          1
+	//       --local              1          1
+	//    --no-local              0          0
 	is_local = option_local != 0 && path && !is_bundle;
 	if (is_local) {
 		if (option_depth)

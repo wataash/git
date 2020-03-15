@@ -1,0 +1,155 @@
+set -x PATH ~/qc/git $PATH
+set -x GIT_TRACE2 true
+
+--------------------------------------------------------------------------------
+git --version
+=> 12:03:48.686856 common-main.c:81                  version 2.26.0.rc1.13.g9b47c2135d.dirty
+
+#0  tr2_dst_write_line (dst=0x55cf8078a770 <tr2dst_normal>, buf_line=0x7fff6ebca0e0) at trace2/tr2_dst.c:383
+#1  0x000055cf806543a3 in normal_io_write_fl (file=0x55cf806dab6f "common-main.c", line=81, buf_payload=0x7fff6ebca120) at trace2/tr2_tgt_normal.c:71
+#2  0x000055cf80654433 in fn_version_fl (file=0x55cf806dab6f "common-main.c", line=81) at trace2/tr2_tgt_normal.c:80
+#3  0x000055cf8064e86a in trace2_initialize_fl (file=0x55cf806dab6f "common-main.c", line=81) at trace2.c:183
+#4  0x000055cf804d5a33 in main (argc=4, argv=0x7fff6ebca288) at common-main.c:81
+#5  0x00007f3c394e2b6b in __libc_start_main (main=0x55cf804d59b4 <main>, argc=4, argv=0x7fff6ebca288, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7fff6ebca278) at ../csu/libc-start.c:308
+#6  0x000055cf80400dfa in _start ()
+
+--------------------------------------------------------------------------------
+git am --reject ~/patch
+
+
+#0  detect_patch_format (paths=0x5572f4d2afe0) at builtin/am.c:592
+#1  0x00005572f41e2985 in am_setup (state=0x7ffe406c9800, patch_format=PATCH_FORMAT_UNKNOWN, paths=0x5572f4d2afe0, keep_cr=-1) at builtin/am.c:945
+#2  0x00005572f41e74ae in cmd_am (argc=1, argv=0x7ffe406ca740, prefix=0x0) at builtin/am.c:2383
+#3  0x00005572f41dd937 in run_builtin (p=0x5572f4557038 <commands+24>, argc=3, argv=0x7ffe406ca740) at git.c:444
+#4  0x00005572f41ddca8 in handle_builtin (argc=3, argv=0x7ffe406ca740) at git.c:674
+#5  0x00005572f41ddf6d in run_argv (argcp=0x7ffe406ca5ec, argv=0x7ffe406ca5e0) at git.c:741
+#6  0x00005572f41de417 in cmd_main (argc=3, argv=0x7ffe406ca740) at git.c:872
+#7  0x00005572f42b0a5c in main (argc=4, argv=0x7ffe406ca738) at common-main.c:85
+#8  0x00007f8744addb6b in __libc_start_main (main=0x5572f42b09b4 <main>, argc=4, argv=0x7ffe406ca738, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7ffe406ca728) at ../csu/libc-start.c:308
+#9  0x00005572f41dbdfa in _start ()
+
+	if (starts_with(l1.buf, "From ") || starts_with(l1.buf, "From: ")) {
+		ret = PATCH_FORMAT_MBOX;
+
+
+mkdir .git/rebase-apply
+delete_ref() REBASE_HEAD
+
+
+#0  split_mail_mbox (state=0x7ffff064e800, paths=0x55865665ebc0, keep_cr=0, mboxrd=0) at builtin/am.c:649
+#1  0x00005586559f389b in split_mail (state=0x7ffff064e800, patch_format=PATCH_FORMAT_MBOX, paths=0x55865665ebc0, keep_cr=0) at builtin/am.c:919
+#2  0x00005586559f3a4c in am_setup (state=0x7ffff064e800, patch_format=PATCH_FORMAT_MBOX, paths=0x55865665ebc0, keep_cr=-1) at builtin/am.c:956
+#3  0x00005586559f84ae in cmd_am (argc=1, argv=0x7ffff064f740, prefix=0x0) at builtin/am.c:2383
+#4  0x00005586559ee937 in run_builtin (p=0x558655d68038 <commands+24>, argc=3, argv=0x7ffff064f740) at git.c:444
+#5  0x00005586559eeca8 in handle_builtin (argc=3, argv=0x7ffff064f740) at git.c:674
+#6  0x00005586559eef6d in run_argv (argcp=0x7ffff064f5ec, argv=0x7ffff064f5e0) at git.c:741
+#7  0x00005586559ef417 in cmd_main (argc=3, argv=0x7ffff064f740) at git.c:872
+#8  0x0000558655ac1a5c in main (argc=4, argv=0x7ffff064f738) at common-main.c:85
+#9  0x00007fc4bf275b6b in __libc_start_main (main=0x558655ac19b4 <main>, argc=4, argv=0x7ffff064f738, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7ffff064f728) at ../csu/libc-start.c:308
+#10 0x00005586559ecdfa in _start ()
+
+mailsplit -d4 -o.git/rebase-apply -b -- /home/wsh/patch
+
+#0  parse_header (line=0x7fff68d5b010, hdr=0x55656ee7b33d "From", mi=0x7fff68d5b110, val=0x7fff68d5afb0) at mailinfo.c:563
+#1  0x000055656ed0de13 in check_header (mi=0x7fff68d5b110, line=0x7fff68d5b010, hdr_data=0x55656f9d80a0, overwrite=1) at mailinfo.c:580
+#2  0x000055656ed0f712 in mailinfo (mi=0x7fff68d5b110, msg=0x55656f9cf560 ".git/rebase-apply/msg", patch=0x55656f9d0330 ".git/rebase-apply/patch") at mailinfo.c:1190
+#3  0x000055656eb8f3a8 in parse_mail (state=0x7fff68d5b370, mail=0x55656f9d0720 ".git/rebase-apply/0001") at builtin/am.c:1168
+#4  0x000055656eb911dd in am_run (state=0x7fff68d5b370, resume=0) at builtin/am.c:1727
+#5  0x000055656eb93502 in cmd_am (argc=1, argv=0x7fff68d5c2b0, prefix=0x0) at builtin/am.c:2391
+#6  0x000055656eb89937 in run_builtin (p=0x55656ef03038 <commands+24>, argc=3, argv=0x7fff68d5c2b0) at git.c:444
+#7  0x000055656eb89ca8 in handle_builtin (argc=3, argv=0x7fff68d5c2b0) at git.c:674
+#8  0x000055656eb89f6d in run_argv (argcp=0x7fff68d5c15c, argv=0x7fff68d5c150) at git.c:741
+#9  0x000055656eb8a417 in cmd_main (argc=3, argv=0x7fff68d5c2b0) at git.c:872
+#10 0x000055656ec5ca5c in main (argc=4, argv=0x7fff68d5c2a8) at common-main.c:85
+#11 0x00007fe71529fb6b in __libc_start_main (main=0x55656ec5c9b4 <main>, argc=4, argv=0x7fff68d5c2a8, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7fff68d5c298) at ../csu/libc-start.c:308
+#12 0x000055656eb87dfa in _start ()
+
+#0  handle_body (mi=0x7fff68d5b110, line=0x7fff68d5b010) at mailinfo.c:1102
+#1  0x000055656ed0f73f in mailinfo (mi=0x7fff68d5b110, msg=0x55656f9cf560 ".git/rebase-apply/msg", patch=0x55656f9d0330 ".git/rebase-apply/patch") at mailinfo.c:1192
+#2  0x000055656eb8f3a8 in parse_mail (state=0x7fff68d5b370, mail=0x55656f9d0720 ".git/rebase-apply/0001") at builtin/am.c:1168
+#3  0x000055656eb911dd in am_run (state=0x7fff68d5b370, resume=0) at builtin/am.c:1727
+#4  0x000055656eb93502 in cmd_am (argc=1, argv=0x7fff68d5c2b0, prefix=0x0) at builtin/am.c:2391
+#5  0x000055656eb89937 in run_builtin (p=0x55656ef03038 <commands+24>, argc=3, argv=0x7fff68d5c2b0) at git.c:444
+#6  0x000055656eb89ca8 in handle_builtin (argc=3, argv=0x7fff68d5c2b0) at git.c:674
+#7  0x000055656eb89f6d in run_argv (argcp=0x7fff68d5c15c, argv=0x7fff68d5c150) at git.c:741
+#8  0x000055656eb8a417 in cmd_main (argc=3, argv=0x7fff68d5c2b0) at git.c:872
+#9  0x000055656ec5ca5c in main (argc=4, argv=0x7fff68d5c2a8) at common-main.c:85
+#10 0x00007fe71529fb6b in __libc_start_main (main=0x55656ec5c9b4 <main>, argc=4, argv=0x7fff68d5c2a8, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7fff68d5c298) at ../csu/libc-start.c:308
+#11 0x000055656eb87dfa in _start ()
+
+#0  handle_info (mi=0x7fff68d5b110) at mailinfo.c:1130
+#1  0x000055656ed0f78e in mailinfo (mi=0x7fff68d5b110, msg=0x55656f9cf560 ".git/rebase-apply/msg", patch=0x55656f9d0330 ".git/rebase-apply/patch") at mailinfo.c:1197
+#2  0x000055656eb8f3a8 in parse_mail (state=0x7fff68d5b370, mail=0x55656f9d0720 ".git/rebase-apply/0001") at builtin/am.c:1168
+#3  0x000055656eb911dd in am_run (state=0x7fff68d5b370, resume=0) at builtin/am.c:1727
+#4  0x000055656eb93502 in cmd_am (argc=1, argv=0x7fff68d5c2b0, prefix=0x0) at builtin/am.c:2391
+#5  0x000055656eb89937 in run_builtin (p=0x55656ef03038 <commands+24>, argc=3, argv=0x7fff68d5c2b0) at git.c:444
+#6  0x000055656eb89ca8 in handle_builtin (argc=3, argv=0x7fff68d5c2b0) at git.c:674
+#7  0x000055656eb89f6d in run_argv (argcp=0x7fff68d5c15c, argv=0x7fff68d5c150) at git.c:741
+#8  0x000055656eb8a417 in cmd_main (argc=3, argv=0x7fff68d5c2b0) at git.c:872
+#9  0x000055656ec5ca5c in main (argc=4, argv=0x7fff68d5c2a8) at common-main.c:85
+#10 0x00007fe71529fb6b in __libc_start_main (main=0x55656ec5c9b4 <main>, argc=4, argv=0x7fff68d5c2a8, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7fff68d5c298) at ../csu/libc-start.c:308
+#11 0x000055656eb87dfa in _start ()
+
+#0  write_author_script (state=0x7fff68d5b370) at builtin/am.c:285
+#1  0x000055656eb9121c in am_run (state=0x7fff68d5b370, resume=0) at builtin/am.c:1735
+#2  0x000055656eb93502 in cmd_am (argc=1, argv=0x7fff68d5c2b0, prefix=0x0) at builtin/am.c:2391
+#3  0x000055656eb89937 in run_builtin (p=0x55656ef03038 <commands+24>, argc=3, argv=0x7fff68d5c2b0) at git.c:444
+#4  0x000055656eb89ca8 in handle_builtin (argc=3, argv=0x7fff68d5c2b0) at git.c:674
+#5  0x000055656eb89f6d in run_argv (argcp=0x7fff68d5c15c, argv=0x7fff68d5c150) at git.c:741
+#6  0x000055656eb8a417 in cmd_main (argc=3, argv=0x7fff68d5c2b0) at git.c:872
+#7  0x000055656ec5ca5c in main (argc=4, argv=0x7fff68d5c2a8) at common-main.c:85
+#8  0x00007fe71529fb6b in __libc_start_main (main=0x55656ec5c9b4 <main>, argc=4, argv=0x7fff68d5c2a8, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7fff68d5c298) at ../csu/libc-start.c:308
+#9  0x000055656eb87dfa in _start ()
+
+#0  run_apply (state=0x7fff68d5b370, index_file=0x0) at builtin/am.c:1424
+#1  0x000055656eb912e5 in am_run (state=0x7fff68d5b370, resume=0) at builtin/am.c:1747
+#2  0x000055656eb93502 in cmd_am (argc=1, argv=0x7fff68d5c2b0, prefix=0x0) at builtin/am.c:2391
+#3  0x000055656eb89937 in run_builtin (p=0x55656ef03038 <commands+24>, argc=3, argv=0x7fff68d5c2b0) at git.c:444
+#4  0x000055656eb89ca8 in handle_builtin (argc=3, argv=0x7fff68d5c2b0) at git.c:674
+#5  0x000055656eb89f6d in run_argv (argcp=0x7fff68d5c15c, argv=0x7fff68d5c150) at git.c:741
+#6  0x000055656eb8a417 in cmd_main (argc=3, argv=0x7fff68d5c2b0) at git.c:872
+#7  0x000055656ec5ca5c in main (argc=4, argv=0x7fff68d5c2a8) at common-main.c:85
+#8  0x00007fe71529fb6b in __libc_start_main (main=0x55656ec5c9b4 <main>, argc=4, argv=0x7fff68d5c2a8, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7fff68d5c298) at ../csu/libc-start.c:308
+#9  0x000055656eb87dfa in _start ()
+
+#0  find_header (state=0x7ffe8e834ef0, line=0x560f09ccc784 " sbin/iked/parse.y | 12 +++++++-----\n 1 file changed, 7 insertions(+), 5 deletions(-)\n\ndiff --git a/iked/parse.y b/iked/parse.y\nindex 99880c3f58b..b4168e443a2 100644\n--- a/iked/parse.y\n+++ b/iked/parse.y\n@@ -1,4 +1,4 @@\n-/*\t$OpenBSD: parse.y,v 1.59 2017/01/04 12:31:01 mikeb Exp $\t*/\n+/*\t$OpenBSD: parse.y,v 1.60 2017/01/05 12:42:18 krw Exp $\t*/\n \n /*\n  * Copyright (c) 2010-2013 Reyk Floeter <reyk@openbsd.org>\n@@ -1513,9 +1513,10 @@ symset(const char *nam, const char *val, int persist)\n {\n \tstruct sym\t*sym;\n \n-\tfor (sym = TAILQ_FIRST(&symhead); sym && strcmp(nam, sym->nam);\n-\t    sym = TAILQ_NEXT(sym, entry))\n-\t\t;\t/* nothing */\n+\tTAILQ_FOREACH(sym, &symhead, entry) {\n+\t\tif (strcmp(nam, sym->nam) == 0)\n+\t\t\tbreak;\n+\t}\n \n \tif (sym != NULL) {\n \t\tif (sym->persist == 1)\n@@ -1574,11 +1575,12 @@ symget(const char *nam)\n {\n \tstruct sym\t*sym;\n \n-\tTAILQ_FOREACH(sym, &symhead, entry)\n+\tTAILQ_FOREACH(sym, &symhead, entry) {\n \t\tif (strcmp(nam, sym->nam) == 0) {\n \t\t\tsym->used = 1;\n \t\t\treturn (sym->val)"..., size=1046, hdrsize=0x7ffe8e834d64, patch=0x560f09cc9340) at apply.c:1576
+#1  0x0000560f083aa501 in parse_chunk (state=0x7ffe8e834ef0, buffer=0x560f09ccc780 "---\n sbin/iked/parse.y | 12 +++++++-----\n 1 file changed, 7 insertions(+), 5 deletions(-)\n\ndiff --git a/iked/parse.y b/iked/parse.y\nindex 99880c3f58b..b4168e443a2 100644\n--- a/iked/parse.y\n+++ b/iked/parse.y\n@@ -1,4 +1,4 @@\n-/*\t$OpenBSD: parse.y,v 1.59 2017/01/04 12:31:01 mikeb Exp $\t*/\n+/*\t$OpenBSD: parse.y,v 1.60 2017/01/05 12:42:18 krw Exp $\t*/\n \n /*\n  * Copyright (c) 2010-2013 Reyk Floeter <reyk@openbsd.org>\n@@ -1513,9 +1513,10 @@ symset(const char *nam, const char *val, int persist)\n {\n \tstruct sym\t*sym;\n \n-\tfor (sym = TAILQ_FIRST(&symhead); sym && strcmp(nam, sym->nam);\n-\t    sym = TAILQ_NEXT(sym, entry))\n-\t\t;\t/* nothing */\n+\tTAILQ_FOREACH(sym, &symhead, entry) {\n+\t\tif (strcmp(nam, sym->nam) == 0)\n+\t\t\tbreak;\n+\t}\n \n \tif (sym != NULL) {\n \t\tif (sym->persist == 1)\n@@ -1574,11 +1575,12 @@ symget(const char *nam)\n {\n \tstruct sym\t*sym;\n \n-\tTAILQ_FOREACH(sym, &symhead, entry)\n+\tTAILQ_FOREACH(sym, &symhead, entry) {\n \t\tif (strcmp(nam, sym->nam) == 0) {\n \t\t\tsym->used = 1;\n \t\t\treturn (sym->"..., size=1050, patch=0x560f09cc9340) at apply.c:2110
+#2  0x0000560f083b16cf in apply_patch (state=0x7ffe8e834ef0, fd=3, filename=0x560f09cc13c0 ".git/rebase-apply/patch", options=0) at apply.c:4672
+#3  0x0000560f083b1f13 in apply_all_patches (state=0x7ffe8e834ef0, argc=1, argv=0x560f09cc9270, options=0) at apply.c:4890
+#4  0x0000560f082cd264 in run_apply (state=0x7ffe8e835170, index_file=0x0) at builtin/am.c:1432
+#5  0x0000560f082ce2e5 in am_run (state=0x7ffe8e835170, resume=0) at builtin/am.c:1747
+#6  0x0000560f082d0502 in cmd_am (argc=1, argv=0x7ffe8e8360b0, prefix=0x0) at builtin/am.c:2391
+#7  0x0000560f082c6937 in run_builtin (p=0x560f08640038 <commands+24>, argc=3, argv=0x7ffe8e8360b0) at git.c:444
+#8  0x0000560f082c6ca8 in handle_builtin (argc=3, argv=0x7ffe8e8360b0) at git.c:674
+#9  0x0000560f082c6f6d in run_argv (argcp=0x7ffe8e835f5c, argv=0x7ffe8e835f50) at git.c:741
+#10 0x0000560f082c7417 in cmd_main (argc=3, argv=0x7ffe8e8360b0) at git.c:872
+#11 0x0000560f08399a5c in main (argc=4, argv=0x7ffe8e8360a8) at common-main.c:85
+#12 0x00007f3a18e87b6b in __libc_start_main (main=0x560f083999b4 <main>, argc=4, argv=0x7ffe8e8360a8, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7ffe8e836098) at ../csu/libc-start.c:308
+#13 0x0000560f082c4dfa in _start ()
+
+if (!memcmp("@@ -", line, 4)) {
+if (!memcmp("diff --git ", line, 11)) {
+if (memcmp("--- ", line,  4) || memcmp("+++ ", line + len, 4))
+if (size < nextlen + 14 || memcmp("@@ -", line + len + nextlen, 4))
+
+#0  git_header_name (p_value=1, line=0x560f09ccc7db "diff --git a/iked/parse.y b/iked/parse.y\nindex 99880c3f58b..b4168e443a2 100644\n--- a/iked/parse.y\n+++ b/iked/parse.y\n@@ -1,4 +1,4 @@\n-/*\t$OpenBSD: parse.y,v 1.59 2017/01/04 12:31:01 mikeb Exp $\t*/\n+/*\t$OpenBSD: parse.y,v 1.60 2017/01/05 12:42:18 krw Exp $\t*/\n \n /*\n  * Copyright (c) 2010-2013 Reyk Floeter <reyk@openbsd.org>\n@@ -1513,9 +1513,10 @@ symset(const char *nam, const char *val, int persist)\n {\n \tstruct sym\t*sym;\n \n-\tfor (sym = TAILQ_FIRST(&symhead); sym && strcmp(nam, sym->nam);\n-\t    sym = TAILQ_NEXT(sym, entry))\n-\t\t;\t/* nothing */\n+\tTAILQ_FOREACH(sym, &symhead, entry) {\n+\t\tif (strcmp(nam, sym->nam) == 0)\n+\t\t\tbreak;\n+\t}\n \n \tif (sym != NULL) {\n \t\tif (sym->persist == 1)\n@@ -1574,11 +1575,12 @@ symget(const char *nam)\n {\n \tstruct sym\t*sym;\n \n-\tTAILQ_FOREACH(sym, &symhead, entry)\n+\tTAILQ_FOREACH(sym, &symhead, entry) {\n \t\tif (strcmp(nam, sym->nam) == 0) {\n \t\t\tsym->used = 1;\n \t\t\treturn (sym->val);\n \t\t}\n+\t}\n \treturn (NULL);\n }\n \n-- \n2.20.1\n\n\n", llen=41) at apply.c:1147
+#1  0x0000560f083a87f9 in parse_git_diff_header (root=0x7ffe8e834f70, linenr=0x7ffe8e834fbc, p_value=1, line=0x560f09ccc7db "diff --git a/iked/parse.y b/iked/parse.y\nindex 99880c3f58b..b4168e443a2 100644\n--- a/iked/parse.y\n+++ b/iked/parse.y\n@@ -1,4 +1,4 @@\n-/*\t$OpenBSD: parse.y,v 1.59 2017/01/04 12:31:01 mikeb Exp $\t*/\n+/*\t$OpenBSD: parse.y,v 1.60 2017/01/05 12:42:18 krw Exp $\t*/\n \n /*\n  * Copyright (c) 2010-2013 Reyk Floeter <reyk@openbsd.org>\n@@ -1513,9 +1513,10 @@ symset(const char *nam, const char *val, int persist)\n {\n \tstruct sym\t*sym;\n \n-\tfor (sym = TAILQ_FIRST(&symhead); sym && strcmp(nam, sym->nam);\n-\t    sym = TAILQ_NEXT(sym, entry))\n-\t\t;\t/* nothing */\n+\tTAILQ_FOREACH(sym, &symhead, entry) {\n+\t\tif (strcmp(nam, sym->nam) == 0)\n+\t\t\tbreak;\n+\t}\n \n \tif (sym != NULL) {\n \t\tif (sym->persist == 1)\n@@ -1574,11 +1575,12 @@ symget(const char *nam)\n {\n \tstruct sym\t*sym;\n \n-\tTAILQ_FOREACH(sym, &symhead, entry)\n+\tTAILQ_FOREACH(sym, &symhead, entry) {\n \t\tif (strcmp(nam, sym->nam) == 0) {\n \t\t\tsym->used = 1;\n \t\t\treturn (sym->val);\n \t\t}\n+\t}\n \treturn (NULL);\n }\n \n-- \n2.20.1\n\n\n", len=41, size=959, patch=0x560f09cc9340) at apply.c:1310
+#2  0x0000560f083a91a6 in find_header (state=0x7ffe8e834ef0, line=0x560f09ccc7db "diff --git a/iked/parse.y b/iked/parse.y\nindex 99880c3f58b..b4168e443a2 100644\n--- a/iked/parse.y\n+++ b/iked/parse.y\n@@ -1,4 +1,4 @@\n-/*\t$OpenBSD: parse.y,v 1.59 2017/01/04 12:31:01 mikeb Exp $\t*/\n+/*\t$OpenBSD: parse.y,v 1.60 2017/01/05 12:42:18 krw Exp $\t*/\n \n /*\n  * Copyright (c) 2010-2013 Reyk Floeter <reyk@openbsd.org>\n@@ -1513,9 +1513,10 @@ symset(const char *nam, const char *val, int persist)\n {\n \tstruct sym\t*sym;\n \n-\tfor (sym = TAILQ_FIRST(&symhead); sym && strcmp(nam, sym->nam);\n-\t    sym = TAILQ_NEXT(sym, entry))\n-\t\t;\t/* nothing */\n+\tTAILQ_FOREACH(sym, &symhead, entry) {\n+\t\tif (strcmp(nam, sym->nam) == 0)\n+\t\t\tbreak;\n+\t}\n \n \tif (sym != NULL) {\n \t\tif (sym->persist == 1)\n@@ -1574,11 +1575,12 @@ symget(const char *nam)\n {\n \tstruct sym\t*sym;\n \n-\tTAILQ_FOREACH(sym, &symhead, entry)\n+\tTAILQ_FOREACH(sym, &symhead, entry) {\n \t\tif (strcmp(nam, sym->nam) == 0) {\n \t\t\tsym->used = 1;\n \t\t\treturn (sym->val);\n \t\t}\n+\t}\n \treturn (NULL);\n }\n \n-- \n2.20.1\n\n\n", size=959, hdrsize=0x7ffe8e834d64, patch=0x560f09cc9340) at apply.c:1563
+#3  0x0000560f083aa501 in parse_chunk (state=0x7ffe8e834ef0, buffer=0x560f09ccc780 "---\n sbin/iked/parse.y | 12 +++++++-----\n 1 file changed, 7 insertions(+), 5 deletions(-)\n\ndiff --git a/iked/parse.y b/iked/parse.y\nindex 99880c3f58b..b4168e443a2 100644\n--- a/iked/parse.y\n+++ b/iked/parse.y\n@@ -1,4 +1,4 @@\n-/*\t$OpenBSD: parse.y,v 1.59 2017/01/04 12:31:01 mikeb Exp $\t*/\n+/*\t$OpenBSD: parse.y,v 1.60 2017/01/05 12:42:18 krw Exp $\t*/\n \n /*\n  * Copyright (c) 2010-2013 Reyk Floeter <reyk@openbsd.org>\n@@ -1513,9 +1513,10 @@ symset(const char *nam, const char *val, int persist)\n {\n \tstruct sym\t*sym;\n \n-\tfor (sym = TAILQ_FIRST(&symhead); sym && strcmp(nam, sym->nam);\n-\t    sym = TAILQ_NEXT(sym, entry))\n-\t\t;\t/* nothing */\n+\tTAILQ_FOREACH(sym, &symhead, entry) {\n+\t\tif (strcmp(nam, sym->nam) == 0)\n+\t\t\tbreak;\n+\t}\n \n \tif (sym != NULL) {\n \t\tif (sym->persist == 1)\n@@ -1574,11 +1575,12 @@ symget(const char *nam)\n {\n \tstruct sym\t*sym;\n \n-\tTAILQ_FOREACH(sym, &symhead, entry)\n+\tTAILQ_FOREACH(sym, &symhead, entry) {\n \t\tif (strcmp(nam, sym->nam) == 0) {\n \t\t\tsym->used = 1;\n \t\t\treturn (sym->"..., size=1050, patch=0x560f09cc9340) at apply.c:2110
+#4  0x0000560f083b16cf in apply_patch (state=0x7ffe8e834ef0, fd=3, filename=0x560f09cc13c0 ".git/rebase-apply/patch", options=0) at apply.c:4672
+#5  0x0000560f083b1f13 in apply_all_patches (state=0x7ffe8e834ef0, argc=1, argv=0x560f09cc9270, options=0) at apply.c:4890
+#6  0x0000560f082cd264 in run_apply (state=0x7ffe8e835170, index_file=0x0) at builtin/am.c:1432
+#7  0x0000560f082ce2e5 in am_run (state=0x7ffe8e835170, resume=0) at builtin/am.c:1747
+#8  0x0000560f082d0502 in cmd_am (argc=1, argv=0x7ffe8e8360b0, prefix=0x0) at builtin/am.c:2391
+#9  0x0000560f082c6937 in run_builtin (p=0x560f08640038 <commands+24>, argc=3, argv=0x7ffe8e8360b0) at git.c:444
+#10 0x0000560f082c6ca8 in handle_builtin (argc=3, argv=0x7ffe8e8360b0) at git.c:674
+#11 0x0000560f082c6f6d in run_argv (argcp=0x7ffe8e835f5c, argv=0x7ffe8e835f50) at git.c:741
+#12 0x0000560f082c7417 in cmd_main (argc=3, argv=0x7ffe8e8360b0) at git.c:872
+#13 0x0000560f08399a5c in main (argc=4, argv=0x7ffe8e8360a8) at common-main.c:85
+#14 0x00007f3a18e87b6b in __libc_start_main (main=0x560f083999b4 <main>, argc=4, argv=0x7ffe8e8360a8, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7ffe8e836098) at ../csu/libc-start.c:308
+#15 0x0000560f082c4dfa in _start ()
+
+line += strlen("diff --git ");
+llen -= strlen("diff --git ");
+
+...

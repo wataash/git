@@ -1179,6 +1179,7 @@ endif
 # tweaked by config.* below as well as the command-line, both of
 # which'll override these defaults.
 CFLAGS = -g -O2 -Wall
+CFLAGS = -ggdb3 -O0 -Wall
 LDFLAGS =
 CC_LD_DYNPATH = -Wl,-rpath,
 BASIC_CFLAGS = -I.
